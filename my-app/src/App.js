@@ -1,17 +1,12 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import PropTypes from "prop-types";
 
 const itemDetails = {
-  title: "Title1",
-  description: "Desc1",
+  title: "Blouse with long sleeves",
+  description: "Ideal for casual walkings",
   price: 12
 };
-
-function onItemClick() {
-  itemDetails.isVisible = !itemDetails.isVisible;
-}
 
 class App extends React.Component {
   constructor(props) {
@@ -49,7 +44,10 @@ class App extends React.Component {
       <div>
         <HeaderApp />
         <div style={{ float: "left", width: "25%" }}>
-          <ShoppingCartItem title="Item1" onClick={this.handleClick} />
+          <ShoppingCartItem
+            title="ShoppingCartItem1"
+            onClick={this.handleClick}
+          />
           <div>{this.state.message}</div>
         </div>
         <div style={{ float: "left" }}>
@@ -72,10 +70,6 @@ function HeaderApp() {
       <div>Shopping Cart</div>
     </div>
   );
-}
-
-function ShoppingCartList() {
-  return <div />;
 }
 
 function ShoppingCartItem({ title, onClick }) {
