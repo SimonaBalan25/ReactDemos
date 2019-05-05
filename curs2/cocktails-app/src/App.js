@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
 import "./App.css";
 import axios from "axios";
-import ItemDetails from "./ItemDetails";
-import ItemTitleDetails from "./ItemTitleDetails";
+import ItemIconDetails from "./Cocktail/ItemIconDetails";
+import ItemTitleDetails from "./Cocktail/ItemTitleDetails";
 
 class App extends React.Component {
   constructor(props) {
@@ -63,7 +63,6 @@ class App extends React.Component {
   }
 
   componentDidUpdate() {
-    //console.log(this.state.categories);
     this.render();
   }
 
@@ -199,7 +198,7 @@ class App extends React.Component {
         {this.state.showCategories ? (
           categoriesDetails
         ) : (
-          <ItemDetails
+          <ItemIconDetails
             itemUrl={this.state.selectedItem.strDrinkThumb}
             itemTitle={this.state.selectedItem.strDrink}
             action={this.backToCategories}
@@ -231,21 +230,18 @@ function ChampagneFlute() {
 }
 
 function SearchCocktailByName() {
+  let searchStyle = {
+    backgroundColor: "lightPink",
+    width: "1000px",
+    borderRadius: "15px",
+    margin: "15px",
+    display: "inline-block",
+    height: "50px",
+    lineHeight: "50px"
+  };
   return (
     <div style={{ textAlign: "center" }}>
-      <div
-        style={{
-          backgroundColor: "lightPink",
-          width: "1000px",
-          borderRadius: "15px",
-          margin: "15px",
-          display: "inline-block",
-          height: "50px",
-          lineHeight: "50px"
-        }}
-      >
-        Search by name
-      </div>
+      <div style={searchStyle}>Search by name</div>
     </div>
   );
 }

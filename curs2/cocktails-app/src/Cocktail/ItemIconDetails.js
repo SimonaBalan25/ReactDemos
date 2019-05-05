@@ -1,6 +1,6 @@
 import React from "react";
 
-class ItemDetails extends React.Component {
+class ItemIconDetails extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -20,4 +20,4 @@ class ItemDetails extends React.Component {
   }
 }
 
-export default ItemDetails;
+export default ItemIconDetails;
