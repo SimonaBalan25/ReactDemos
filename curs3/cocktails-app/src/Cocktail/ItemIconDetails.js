@@ -3,19 +3,37 @@ import React from "react";
 class ItemIconDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { itemUrl: "", itemTitle: "" };
+    this.state = { itemUrl: "", itemTitle: "", category: "" };
   }
 
   componentDidMount() {
-    this.setState({
-      itemUrl: this.props.location.state.response.strDrinkThumb,
-      itemTitle: this.props.location.state.response.strDrink
-    });
+    if (this.props.location.state != undefined) {
+      this.setState({
+        itemUrl: this.props.location.state.response.strDrinkThumb,
+        itemTitle: this.props.location.state.response.strDrink,
+        category: this.props.location.state.current
+      });
+    }
   }
 
-  returnToMain() {
-    this.props.history.goBack();
+  getPrevRoute() {
+    switch (this.state.category) {
+      case "AlcoholicDrinks":
+        return "/alcoholic-drinks";
+      case "NonAlcoholicDrinks":
+        return "/nonalcoholic-drinks";
+      case "OrdinaryDrinks":
+        return "/ordinary-drinks";
+      case "ChampagneFlute":
+        return "/champagne-flute";
+      case "CocktailGlass":
+        return "/cocktail-glass";
+    }
   }
+
+  returnToMain = e => {
+    this.props.history.push(this.getPrevRoute());
+  };
 
   render() {
     console.log("item details");
@@ -27,7 +45,7 @@ class ItemIconDetails extends React.Component {
           <h2>{this.state.itemTitle}</h2>
         </div>
         <div>
-          <button onClick={this.returnToMain.bind(this)}>Back</button>
+          <button onClick={this.returnToMain}>Back</button>
         </div>
       </div>
     );

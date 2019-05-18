@@ -4,14 +4,10 @@ import axios from "axios";
 import ItemIconDetails from "./Cocktail/ItemIconDetails";
 import ItemTitleDetails from "./Cocktail/ItemTitleDetails";
 import { Router, Route, Link, Switch } from "react-router-dom";
-import AlcoholicDrinks from "./Categories/AlcoholicDrinks";
-import NonAlcoholicDrinks from "./Categories/NonAlcoholicDrinks";
-import OrdinaryDrinks from "./Categories/OrdinaryDrinks";
-import CocktailGlass from "./Categories/CocktailGlass";
-import ChampagneFlute from "./Categories/ChampagneFlute";
 import AddCocktailForm from "./Cocktail/AddCocktailForm";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import Cocktails from "./Categories/Cocktails";
 import history from "./history";
 import createBrowserHistory from "history/createBrowserHistory";
 const history2 = createBrowserHistory();
@@ -19,61 +15,9 @@ const history2 = createBrowserHistory();
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showCategories: true,
-      showTitleDetails: false,
-      showDetails: false,
-      selectedItem: {},
-      categories: [
-        {
-          title: "Alcoholic",
-          url: "https://thecocktaildb.com/api/json/v1/1/filter.php?a=",
-          items: []
-        },
-        {
-          title: "Non_Alcoholic",
-          url: "https://thecocktaildb.com/api/json/v1/1/filter.php?a=",
-          items: []
-        },
-        {
-          title: "Ordinary_Drink",
-          url: "https://thecocktaildb.com/api/json/v1/1/filter.php?c=",
-          items: []
-        },
-        {
-          title: "Cocktail_glass",
-          url: "https://thecocktaildb.com/api/json/v1/1/filter.php?g=",
-          items: []
-        },
-        {
-          title: "Champagne_flute",
-          url: "https://thecocktaildb.com/api/json/v1/1/filter.php?g=",
-          items: []
-        }
-      ]
-    };
-    this.backToCategories = this.backToCategories.bind(this);
-    this.hideTitleDetails = this.hideTitleDetails.bind(this);
-    this.handleSet = this.handleSet.bind(this);
   }
 
-  componentDidMount() {
-    this.state.categories.forEach(c => this.fetchCategory(c));
-  }
-
-  fetchCategory(categ) {
-    var linkUrl = categ.url + categ.title;
-
-    axios
-      .get(linkUrl)
-      .then(response => {
-        categ.items = response.data.drinks;
-        this.setState({ items: response.data.drinks });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
+  componentDidMount() {}
 
   componentDidUpdate() {
     console.log("did update");
@@ -86,72 +30,7 @@ class App extends React.Component {
 
   componentWillUnmount() {}
 
-  onShowDetails(item) {
-    this.setState(
-      {
-        showCategories: false,
-        showDetails: true,
-        showTitleDetails: false,
-        selectedItem: item
-      },
-      () => {
-        this.forceUpdate();
-      }
-    );
-  }
-
-  onShowTitleDetails(item) {
-    this.setState({ showTitleDetails: true, selectedItem: item });
-  }
-
-  hideTitleDetails() {
-    this.setState({ showTitleDetails: false }, () => {
-      console.log(this.showTitleDetails);
-    });
-  }
-
-  backToCategories() {
-    this.setState({ showCategories: true, showDetails: false });
-  }
-
-  handleSet() {
-    this.setState({ showCategories: false }, () => {
-      this.forceUpdate();
-    });
-    console.log("yes");
-  }
-
   render() {
-    let categoriesDetails = this.state.categories.map((categ, index) => {
-      //let selectedCateg = this.state.categories[index];
-
-      let itemDetails = categ.items.map((item, index) => {
-        return (
-          <div style={{ flex: "1 0 21%" }}>
-            <div>
-              <a onClick={this.onShowDetails.bind(this, item)} href="#">
-                <img src={item.strDrinkThumb} style={{ width: "130px" }} />
-              </a>
-            </div>
-            <div>
-              <a onClick={this.onShowTitleDetails.bind(this, item)} href="#">
-                {item.strDrink}
-              </a>
-            </div>
-          </div>
-        );
-      });
-
-      return (
-        <div>
-          <h2>{categ.title}</h2>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>{itemDetails}</div>
-        </div>
-      );
-    });
-
-    console.log(this.state.showCategories);
-
     return (
       <div className="App">
         <h2 class="App-header">Cocktails</h2>
@@ -159,13 +38,7 @@ class App extends React.Component {
         <Router history={history}>
           <div class="Categories-header">
             <div class="First-category">
-              <Link
-                to="/alcoholic-drinks"
-                onClick={() => {
-                  console.log(history);
-                  this.setState({ showCategories: false });
-                }}
-              >
+              <Link to="/alcoholic-drinks" onClick={() => {}}>
                 AlcoholicDrinks
               </Link>
             </div>
@@ -205,39 +78,51 @@ class App extends React.Component {
 
           <Switch>
             <Route
-              exact
               path="/alcoholic-drinks"
-              render={props => <AlcoholicDrinks {...props} history={history} />}
+              key="A"
+              render={props => (
+                <Cocktails
+                  {...props}
+                  category="AlcoholicDrinks"
+                  history={history}
+                />
+              )}
             />
             <Route path="/item-details" component={ItemIconDetails} />
             <Route path="/add-cocktail" component={AddCocktailForm} />
             <Route
               path="/non-alcoholic-drinks"
-              component={NonAlcoholicDrinks}
+              render={() => (
+                <Cocktails category="NonAlcoholicDrinks" history={history} />
+              )}
               onChange={() => {
                 this.setState({ showCategories: false });
               }}
+              key="NA"
             />
-            <Route path="/ordinary-drinks" component={OrdinaryDrinks} />
-            <Route path="/cocktail-glass" component={CocktailGlass} />
-            <Route path="/champagne-flute" component={ChampagneFlute} />
+            <Route
+              path="/ordinary-drinks"
+              key="O"
+              render={() => (
+                <Cocktails category="OrdinaryDrinks" history={history} />
+              )}
+            />
+            <Route
+              path="/cocktail-glass"
+              key="CG"
+              render={() => (
+                <Cocktails category="CocktailGlass" history={history} />
+              )}
+            />
+            <Route
+              path="/champagne-flute"
+              key="CF"
+              render={() => (
+                <Cocktails category="ChampagneFlute" history={history} />
+              )}
+            />
           </Switch>
         </Router>
-
-        {this.state.showCategories ? (
-          <div>
-            <div>
-              <SearchCocktailByName />
-            </div>
-            <AlcoholicDrinks />
-            <NonAlcoholicDrinks />
-            <OrdinaryDrinks />
-            <CocktailGlass />
-            <ChampagneFlute />
-          </div>
-        ) : (
-          ""
-        )}
       </div>
     );
   }

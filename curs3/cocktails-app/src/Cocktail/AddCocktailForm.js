@@ -4,11 +4,24 @@ import Thumb from "./Thumb";
 import "../App.css";
 
 class AddCocktailForm extends React.Component {
+  state = { thumb: null };
   handleSubmit = (values, { props = this.props, setSubmitting }) => {
     //process form submission here
     console.log("Submitted Values:", values);
 
-    this.props.history.goBack();
+    let reader = new FileReader();
+
+    reader.onloadend = () => {
+      this.setState({ thumb: reader.result }, () => {
+        this.props.history.push("/alcoholic-drinks", {
+          cocktail_name: values.cocktail_name,
+          file: this.state.thumb
+        });
+      });
+    };
+
+    reader.readAsDataURL(values.file);
+
     //done submitting, set submitting to false
     setSubmitting(false);
     return;
@@ -37,7 +50,7 @@ class AddCocktailForm extends React.Component {
         render={props => (
           <form onSubmit={props.handleSubmit}>
             <div class="cocktailImageDiv">
-              <label for="file">File upload</label>
+              <label htmlFor="file">File upload</label>
               <input
                 id="file"
                 name="file"
